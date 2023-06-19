@@ -53,10 +53,6 @@ class QuestionController extends Controller
         ]);
     }
 
-
-
-
-
     public function store()
     {
         $results = [

@@ -59,9 +59,36 @@ class User extends Authenticatable
 
     public static function orderByXp()
     {
-        $user = User::whereHas('quizzes', function($query){
-            $query->where('score', '>', '0');
-        })->withCount('quizzes')->withSum('quizzes', 'score')->orderBy('quizzes_sum_score', 'desc');
+        $user = User::withCount([
+                'quizzes' => function ($query) {
+                    $query->where('score', '>', 0);
+                }
+            ])
+            ->withSum([
+                'quizzes' => function ($query) {
+                    $query->where('submitted', true);
+                }
+            ],
+            'score')
+            ->orderBy('quizzes_sum_score', 'desc');
+//            User::with('quizzes')->whereRelation('quizzes', 'score', '>', 0)->get();
+//        dd($user);
+//            User::whereHas('quizzes', function($query){
+//                $query->where('submitted', true)->where('score', '>', '0')->having('score', '>', 0);
+//            })->whereHas('quizzes', function ($query) {
+//                $query->withCount('quizzes');
+//            });
+//            with('quizzes')
+//                ->where('submitted', true, "ahha")
+//                ->withSum('quizzes', 'score')
+//                ->orderBy('quizzes_sum_score', 'desc');
+
+
+//        ->whereHas('quizzes', function ($query) {
+//            $query->where('score', '>', '0');
+//        });
+//        dd($user->get());
+//        ->withCount('quizzes')->withSum('quizzes', 'score')->orderBy('quizzes_sum_score', 'desc');
         return $user;
 
     }

@@ -10,8 +10,10 @@ class LeaderboardController extends Controller
     public function index()
     {
 //        dd(User::orderByXp());
+        $users = User::orderByXp();
+//        dd($users->get());
         return view('leaderboard', [
-            'users' => User::orderByXp()->paginate(10),
+            'users' => $users->paginate(10),
         ]);
     }
 }
